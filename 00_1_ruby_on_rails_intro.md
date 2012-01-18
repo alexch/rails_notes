@@ -1,4 +1,3 @@
-<script src="file/shrink.js" />
 <style>
 pre, pre.sh_sourceCode { background-color: #e5e5ef; border: 1px solid #999; }
 </style>
@@ -18,7 +17,7 @@ Ready...?
 * Feb 2008: GitHub.com launches
 * > 2007: De-facto standard for new web startups in Silicon Valley
 
-# Philosophy
+# Rails Philosophy
 
 * Opinionated
 * Convention over configuration
@@ -27,6 +26,15 @@ Ready...?
 * Test Driven Development (TDD)
 * "Low in ceremony"
   * Minimal code - maximal effect
+  
+# Rails Architecture
+
+* Generators and Scaffolding
+* MVC (Model/View/Controller pattern)
+* RESTy routes
+* Active Record ORM
+  * including migrations!
+  * DB agnostic
 
 # How You Will Learn
 
@@ -46,15 +54,16 @@ Ready...?
 
 # Tool Chain
 
-* Linux/Mac
+* Linux/Mac/Windows
 * git -- revision control
 * RVM -- Ruby version manager
 * gems -- Ruby libraries & management
 * rake -- maintenance tasks
-* ruby
+* ruby -- programming language
 * RSpec -- testing framework
-* Rails
-* MySQL
+* Rails -- framework
+* ERB -- HTML templates with Ruby
+* MySQL/Sqlite/Postgres -- open source relational database(s)
 
 # Help! So much new stuff?!
 

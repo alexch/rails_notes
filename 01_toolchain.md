@@ -20,6 +20,7 @@
 * `git commit` -- commit staged files
 
 <https://git.wiki.kernel.org/index.php/GitCheatSheet>
+<http://help.github.com/git-cheat-sheets/>
 
 !SLIDE
 ## The git development workflow
