@@ -2,30 +2,28 @@
 
 Wolfram Arnold's notes and slides for teaching Rails
 
-## Author
+## Authors
 
-Wolfram Arnold <wolfram@rubyfocus.biz>
+* Wolfram Arnold <wolfram@rubyfocus.biz>
+  * GitHub/Twitter/LinkedIn: wolframarnold
 
-GitHub/Twitter/LinkedIn: wolframarnold
+* Alex Chaffee <mailto:alex@stinky.com>
+  * <http://alexchaffee.com>
+  * GitHub/Twitter: alexch
 
 # Showing the slides
 
-We use a Ruby app called `showoff` to generate and serve the slides.
+We use a Ruby app called `deck.rb` to generate and serve the slides.
 
-Alex has been improving showoff; until his latest patches get accepted and released, you will have to download and install his version, as follows:
-
-    git clone git://github.com/alexch/showoff.git
-    cd showoff
-    bundle install --without optional
-    rake gem:install
+    gem install deckrb
     
 After installing, run
 
-    showoff serve
+    deck run *.md
 
-This will launch a local Sinatra server on port 9090. Open your browser to `localhost:9090`. On a Mac you can run:
+This will launch a local Sinatra server on port 4333. Open your browser to `localhost:4333`. On a Mac you can run:
 
-    open http://localhost:9090
+    open http://localhost:4333
 
 Use arrow keys to navigate slides. Press '?' to see a help window.
 
@@ -35,15 +33,7 @@ Slides are in [Markdown](http://daringfireball.net/projects/markdown/syntax) for
 
 You can also add custom `.css`, `.scss`, and `.js` files, which will get imported into all slide sections.
 
-Images should be in, or relative to, the current directory.
-
-# Printing slides
-
-Try this: first `gem install pdfkit`, then visit
-
-    http://localhost:9090/pdf
-
-but I make no guarantees!
+Images should be in, or relative to, the directory that the source markdown file is in.
 
 ## Based upon and/or inspired by
 
