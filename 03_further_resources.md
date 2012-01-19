@@ -4,19 +4,28 @@
 
 # Further Resources
 
-## Railcasts
-
-* <http://railscasts.com/>
-* <http://asciicasts.com/>
-
-## Rails API Documentation & Guides
+## Rails Documentation & Guides
 
 * <http://guides.rubyonrails.org/>
 * <http://railsapi.com/>
 
-## San Francisco Bay Area Resources
+## Learning Ruby
+
+* <http://testfirst.org>
+* <http://rubykoans.com>
+* <http://rubymonk.com>
+* <http://github.com/alexch/ruby_notes>
+
+## Learning Rails
+
+* <http://railscasts.com/>
+* <http://asciicasts.com/>
+* <http://github.com/alexch/rails_notes>
+* <http://curriculum.railsbridge.org>
+
+## San Francisco Bay Area Groups
 
 * <http://www.meetup.com/sfruby/>
 * <http://www.meetup.com/ebruby/>
 * <http://www.meetup.com/svruby/>
-
+* <http://workshops.railsbridge.org>
