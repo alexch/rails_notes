@@ -4,6 +4,12 @@
 
 # Further Resources
 
+## Screencasts
+
+* <http://railscasts.com/>
+* <http://asciicasts.com/>
+* <http://destroyallsoftware.com/>
+
 ## Rails Documentation & Guides
 
 * <http://guides.rubyonrails.org/>
