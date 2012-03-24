@@ -8,24 +8,29 @@
 
 ![MVC](images/mvc.png)
 
-# Saving for posterity
+# Command-Line Summary
+
+## Creating a Rails project
+
+    rails new my_app
+    cd my_app
+
+(Error? Try `gem install rails`)
+
+## Versioning with Git
 
     git init
-
-Create `.gitignore` file
-
     git status
     git add .
     git status
     git commit -m "Initial commit"
 
-# Deploy
-
-    gem install heroku
+## Deploying to Heroku
 
     heroku create
-
     git push heroku master
+
+(Error? Try `gem install heroku` and make sure your *ssh key* is correct.)
 
 # Onto a Real (Demo) App
 
@@ -36,8 +41,10 @@ Create `.gitignore` file
 # Create App
 
     rails new demo_app
-
-    echo "rvm use 1.9.2@rails3" > .rvmrc
+    cd demo_app
+    echo "rvm use 1.9.3@rails3" > .rvmrc
+    git init
+    
     
 # Create a Scaffold for User
 
@@ -60,6 +67,11 @@ A scaffold is a vertical slice of application, including a database migration, a
 
     rake db:migrate
 
+* A *migration* is a little script that changes the database schema
+* When you run `rake db:migrate`, Rails applies *all* the migrations that have *not yet been applied* to the current database
+* This allows you to change the development schema ahead of changing the production schema
+  * when you deploy to production, run `rake db:migrate` and get *all the new migrations*
+
 # A look at the model
 
     rails console
@@ -68,7 +80,6 @@ A scaffold is a vertical slice of application, including a database migration, a
     > User.create!(:name => 'Joe', :email => 'joe@example.com')
     > User.find(1)
 
-
 # Restful Routes
 
     map.resources :users (config/routes.rb)
@@ -76,19 +87,19 @@ A scaffold is a vertical slice of application, including a database migration, a
     rake routes
 
     users_path, users_url "named route methods"
-    GET		/users			→ “index” action
-    POST	/users			→ “create” action
+    GET		/users			-> "index" action
+    POST	/users			-> "create" action
 
     new_user_path, new_user_url
-    GET		/users/new		→ “new” action
+    GET		/users/new		-> "new" action
 
     edit_user_path(id), edit_user_url(id)
-    GET		/users/:id/edit	→ “edit” action with ID
+    GET		/users/:id/edit	-> "edit" action with ID
 
     user_path(id), user_url(id)
-    GET		/users/:id		→ “show” action with ID
-    PUT 	/users/:id		→ “update” action with ID
-    DELETE  /users/:id		→ “destroy” action with ID
+    GET		/users/:id		-> "show" action with ID
+    PUT 	/users/:id		-> "update" action with ID
+    DELETE  /users/:id		-> "destroy" action with ID
 
 
 !SLIDE
@@ -112,7 +123,7 @@ Source: (c) 2011, Michael Hartl, railstutorial.com
 * No data validations
 * No authentication or access protection
 * Both HTML and XML responses -- often not warranted
-* Tests are boilderplate, and not very robust
+* Tests are boilerplate, and not very robust
 * No real understanding
 
 # Models
@@ -386,7 +397,6 @@ If you're using RubyMine, open your `.gitignore` file and add a line with `.idea
     git add .
     git commit -m "First commit, RSpec installed"
 
-
 !SLIDE subsection
 
 # Test-First Teaching in Rails
@@ -547,7 +557,10 @@ Also available: generate dummy data
 
 * start with a generator
   * `rails g migration MODEL field:type field:type`
-* add indexes by hand
+  * e.g. `rails g migration User User name:string age:integer`
+* you must add extra indexes on your own
+  * or `rails g migration add_some_indexes` makes an empty migration which you can fill in 
+* Migrations are stored in the `db/migrate` directory
 
 # Access Control
 
