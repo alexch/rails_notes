@@ -1,0 +1,115 @@
+# Rails Outline
+
+Using Michael Hartl's Rails Tutorial http://ruby.railstutorial.org/book
+
+## Chapter 1: From zero to deploy
+
+Rails Toolchain
+  Text Editors and IDEs
+  Git
+  Ruby
+  Github
+  Bundler
+  Heroku
+  
+Model/View/Controller Architecture (simple)
+
+## Chapter 2: A demo app
+
+Rails Generators
+Scaffolding
+ActiveRecord and SQL
+Migrations and Schema Versioning
+Gemfiles
+bundle exec
+two tools: rake vs. rails 
+The Seven RESTful Routes
+Model/View/Controller Architecture (more details)
+Deploying the demo app
+
+## Chapter 3: Mostly static pages
+
+Test-driven development
+Truly static pages
+Slightly dynamic pages
+
+## Chapter 4: Rails-flavored Ruby
+
+skip most of this chapter, except...
+4.1 Motivation
+Listing 4.2. Defining a full_title helper. 
+Listing 4.3. The sample application site layout. 
+Listing 4.4. Updated tests for the Home page’s title. 
+4.2.5 Back to the title helper
+4.3.4 CSS revisited
+
+## Chapter 5: Filling in the layout
+
+The Bootstrap CSS Framework
+Partials
+Sass/SCSS
+The Asset Pipeline
+More on Routes
+  * Route tests
+  * Rails routes
+  * 5.3.3 Named routes
+
+5.3.4 Pretty RSpec
+
+## Chapter 6 Modeling users
+
+ActiveRecord Basics
+  6.1.1 Database migrations
+  6.1.2 The model file
+  Model annotation
+  Accessible attributes  6.1.3 Creating user objects
+  6.1.4 Finding user objects
+  6.1.5 Updating user objects
+  6.2 Validations
+  6.3 Confirmation fields and encryption
+
+## Chapter 7: Sign up
+
+Forms and form_for
+"flash" messages
+
+## Chapter 8 Sign in, sign out
+
+Sessions
+
+## Chapter 9 Updating, showing, and deleting users
+
+More CRUD
+  * updating
+  * showing
+  * deleting
+Revisiting attr_accessible
+
+## Chapter 10 User microposts
+
+Associations
+  has_many
+  belongs_to
+calling methods on the association object
+  Table 10.1: A summary of user/micropost association methods.
+test factories (FactoryGirl)
+default_scope
+dependent: :destroy
+more validations
+fake fixture data with Faker
+10.3.1 Access control
+More CRUD
+
+## Chapter 11 Following users
+
+"has many through" associations
+  Figure 11.7: A model of followed users through user relationships.
+"foreign key" associations
+instant Ajax with "form_for... remote:true"  
+association scopes (aka predicates or filters)
+  11.3.3 Scopes, subselects, and a lambda
+
+
+
+
+
