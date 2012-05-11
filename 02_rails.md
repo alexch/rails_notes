@@ -30,7 +30,22 @@
     heroku create
     git push heroku master
 
-(Error? Try `gem install heroku` and make sure your *ssh key* is correct.)
+# Heroku troubleshooting
+
+* `gem install heroku` gives you the `heroku` command
+* `heroku keys:add` registers your *ssh key* with Heroku
+* in your project's `Gemfile`, make sure `pg` is in the `production` group and `sqlite3` is in the `development` group
+
+        group :development, :test do
+          gem 'sqlite3'
+        end
+        group :production do
+          gem 'pg'
+        end
+
+* Linux only: add the `therubyracer` gem to your `Gemfile`
+
+        gem 'therubyracer', :platform => :ruby
 
 # Onto a Real (Demo) App
 
@@ -232,28 +247,31 @@ Reference: <http://guides.rubyonrails.org/active_record_querying.html>
     # Alternatively, with hash keys substitution
     User.where(["name = :str AND email = :email", :str => str, :email => 'joe@example.com'])
 
-# Add RSpec
+    The `~>` syntax for specifying versions mean that bundler will tolerate minor release revisions (e.g. `"~> 1.0.0"` will also accept version 1.0.1, but not 1.1.0)
+
+# Adding RSpec
+Create your app like this:
+
+    rails new sample_app --skip-test-unit
+
 Open `Gemfile` and add:
 
     group :development do
-      gem 'rspec-rails', '~> 2.6.0'
+      gem 'rspec-rails'
     end
+    
     group :test do
-      gem 'rspec', '~> 2.6.0'
+      gem 'rspec'
+      gem 'capybara'
     end
 
 Then, run:
 
     bundle install
+    
+And finally:
 
-Bundler is a tool to manage a project's gem dependencies. This command will check and, if necessary, install all the gems and specific versions according to the `Gemfile` manifest.
-
-The `~>` syntax for specifying versions mean that bundler will tolerate minor release revisions (e.g. `"~> 1.0.0"` will also accept version 1.0.1, but not 1.1.0)
-
-# Run RSpec's installer
-
-    rails g rspec:install
-
+    rails generate rspec:install
 
 # CRUD Exercise
 
@@ -296,7 +314,7 @@ Create a new file in your Rails directory tree: `spec/models/user_spec.rb`. Then
 
 # Destroyed Objects
 
-##... are frozen
+### ... are frozen
 
     @@@ruby
     u = User.create(:name=>'Joe', :email=>'joe@example.com')
@@ -532,9 +550,6 @@ Also available: generate dummy data
 
 # Form posts
 
-
-    @@@ruby
-
     @@@ruby
     class UsersController < ApplicationController
 
@@ -579,7 +594,6 @@ Also available: generate dummy data
 
     rake db:migrate
 
-
 # Validations for Micropost
 
     @@@ruby
@@ -587,12 +601,13 @@ Also available: generate dummy data
         validates :content,
                   :presence => true,
                   :length   => {:maximum => 140}
-        ...
     end
 
 <http://guides.rubyonrails.org/active_record_validations_callbacks.html#validation-helpers>
 
 # Associations
+
+Associations relate one model to another, e.g. via *foreign keys* or *join tables*.
 
     @@@ruby
     class User < ActiveRecord::Base
@@ -601,8 +616,6 @@ Also available: generate dummy data
 
     class Micropost < ActiveRecord::Base
       belongs_to :user
-
-      validates :content, :length => { :maximum => 140 }
     end
 
 !SLIDE
@@ -678,17 +691,17 @@ Also available: generate dummy data
 
 # Testing for instance variables in a controller spec
 
-    # spec fils:
+    # spec file:
 
-    it "has a variable x" do
-      get :action
-      assigns[:x].should_not be_nil  # accesses @x in controller
+    it "finds the user" do
+      get :show, :id => 1
+      assigns[:user].should_not be_nil  # accesses @user in controller
     end
 
     # Controller:
 
-    def action
-      @x = ...
+    def show
+      @user = User.find(params[:id])
     end
 
 # Time helpers
@@ -699,28 +712,41 @@ Also available: generate dummy data
     time_ago_in_words(Time.now)
     time_ago_in_words(1.day.ago)
 
-# Rendering by object collection
+# Rendering collections
 
-In views:
-
-    # show.html.erb
+`show.html.erb`:
 
     <% @users.each do |u| %>
       <%= u.name %>
       ...
     <% end %>
 
-# Move it to a partial by the same name
+# Rendering collections via a partial
 
-    # show.html.erb
-    <%= render @users %>
+Move it to a partial by the same name:
 
-    # _user.html.erb  (singular!)
+`_user.html.erb`:  (singular! and with a leading underscore)
+
     <% user.name %>
 
-.
+Then call it from the main view:
 
-* Automatic loop
+`show.html.erb` (one way)
+
+    <% @users.each do |user| %>
+     <%= render :partial => 'user', :object => user %>
+    <% end %>
+
+`show.html.erb` (another way)
+
+    <% @users.each do |user| %>
+     <%= render user %>
+    <% end %>
+
+`show.html.erb` (yet another way)
+
+    <%= render @users %>
+
 
 # Finders
 
@@ -731,3 +757,10 @@ In views:
     # also:
 
     User.find_by_name("Joe")
+
+# Synchronizing Databases
+
+    gem install taps
+    heroku db:pull
+
+<https://devcenter.heroku.com/articles/taps>

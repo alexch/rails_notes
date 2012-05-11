@@ -13,6 +13,7 @@
 
 # Git Cheat Sheet
 
+* `git init` -- create a repo locally
 * `git clone` -- copy a repo from a server
 * `git status` -- what has changed
 * `git log` -- history
@@ -98,7 +99,3 @@ More help:
 * Sign-up for free account: heroku.com
 * Free for single dyno (single thread) of web server
 
-&nbsp;
-    gem install heroku
-    
-    heroku keys:add

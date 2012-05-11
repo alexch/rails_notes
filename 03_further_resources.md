@@ -1,6 +1,6 @@
 # Evaluation
 
-<http://marakana.com/survey/1905.html>
+<http://mrkn.com/survey>
 
 # Further Resources
 
