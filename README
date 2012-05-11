@@ -19,7 +19,7 @@ We use a Ruby app called `deck.rb` to generate and serve the slides.
     
 After installing, run
 
-    deck run *.md
+    deck *.md
 
 This will launch a local Sinatra server on port 4333. Open your browser to `localhost:4333`. On a Mac you can run:
 

@@ -2,6 +2,15 @@
 
 <http://mrkn.com/survey>
 
+## Google Group
+
+<http://groups.google.com/group/rubybootcampers>
+
+## GitHub Repos
+
+* <http://github.com/alexch/ruby_notes>
+* <http://github.com/alexch/rails_notes>
+
 # Further Resources
 
 ## Screencasts
