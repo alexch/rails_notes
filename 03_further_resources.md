@@ -1,6 +1,6 @@
 # Evaluation
 
-<http://mrkn.com/survey>
+<http://mrkn.co/survey>
 
 ## Google Group
 
