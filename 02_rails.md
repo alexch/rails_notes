@@ -1,6 +1,6 @@
 !SLIDE subsection
 
-# Ruby-on-Rails
+# Ruby on Rails
 
 !SLIDE
 
@@ -91,31 +91,35 @@ A scaffold is a vertical slice of application, including a database migration, a
 
     rails console
 
-    > ActiveRecord::Base.logger = Logger.new(STDOUT)
     > User.create!(:name => 'Joe', :email => 'joe@example.com')
     > User.find(1)
 
 # Restful Routes
 
-    map.resources :users (config/routes.rb)
+`config/routes.rb`:
 
-    rake routes
+    resources :users
 
-    users_path, users_url "named route methods"
-    GET		/users			-> "index" action
-    POST	/users			-> "create" action
+`rake routes`:
 
-    new_user_path, new_user_url
-    GET		/users/new		-> "new" action
+        users GET    /users(.:format)          users#index
+              POST   /users(.:format)          users#create
+     new_user GET    /users/new(.:format)      users#new
+    edit_user GET    /users/:id/edit(.:format) users#edit
+         user GET    /users/:id(.:format)      users#show
+              PUT    /users/:id(.:format)      users#update
+              DELETE /users/:id(.:format)      users#destroy
 
-    edit_user_path(id), edit_user_url(id)
-    GET		/users/:id/edit	-> "edit" action with ID
+# Named Routes
 
-    user_path(id), user_url(id)
-    GET		/users/:id		-> "show" action with ID
-    PUT 	/users/:id		-> "update" action with ID
-    DELETE  /users/:id		-> "destroy" action with ID
+|named route|result|
+|---|---|
+|users_path | "/users" |
+|new_user_path | "/users/new" |
+|edit_user_path(u) | "/users/#{u.id}/edit" |
+|user_path(u) | "/users/#{u.id}" |
 
+There are also _url versions (when you really need the protocol and host) but _path is more portable.
 
 !SLIDE
 
@@ -147,12 +151,11 @@ Source: (c) 2011, Michael Hartl, railstutorial.com
 
     rails c[onsole]
 
-    ActiveRecord::Base.logger = Logger.new(STDOUT)
-
     u = User.new
     u = User.new(:name => "Joe Smith", :email => "joe@example.com")
-    u.save
-    u.save!
+    u.save  # returns 'false' on failure
+    u.save! # raises exception on failure
+
     u = User.create(:name => "Joe Smith", :email => "joe@example.com")
     u = User.create!(:name => "Joe Smith", :email => "joe@example.com")
 
@@ -167,8 +170,6 @@ Each column in the database auto-magically turns into a method on the model obje
     u = User.new
     u.name = "Joe"
     u.name  # => "Joe"
-
-Behind the veil of magic: `method_missing`
 
 # Instantiating vs. Creating
 
@@ -246,8 +247,6 @@ Reference: <http://guides.rubyonrails.org/active_record_querying.html>
 
     # Alternatively, with hash keys substitution
     User.where(["name = :str AND email = :email", :str => str, :email => 'joe@example.com'])
-
-    The `~>` syntax for specifying versions mean that bundler will tolerate minor release revisions (e.g. `"~> 1.0.0"` will also accept version 1.0.1, but not 1.1.0)
 
 # Adding RSpec
 Create your app like this:
@@ -328,7 +327,6 @@ Create a new file in your Rails directory tree: `spec/models/user_spec.rb`. Then
 
     u.frozen?  #  => true
 
-
 Frozen objects can't be modified
 
 # Query Exercise
@@ -353,6 +351,7 @@ Frozen objects can't be modified
 * all
 * count
 
+# Query Exercise
 
 Create a new file in your Rails directory tree: `spec/models/user_queries_spec.rb`. Then paste the following content in:
 
@@ -415,127 +414,82 @@ If you're using RubyMine, open your `.gitignore` file and add a line with `.idea
     git add .
     git commit -m "First commit, RSpec installed"
 
-!SLIDE subsection
+# Testing for instance variables in a controller spec
 
-# Test-First Teaching in Rails
+`user_spec.rb`:
 
-## Add the `rails_tft` gem to your `Gemfile`
-
-Add to your `Gemfile`
-
-    gem "tft_rails"
-
-Then run
-
-    bundle install
-
-# TFT Generators
-
-    rails g  # see all generators
-
-## Add tests (i.e. student assignments) to the project
-
-    rails g chapter07:begin
-
-## View generated instructions file
-
-## Then add code to make them pass
-
-    rake spec   # should be all green
-
-## Skip ahead/stuck?
-
-    rails g chapter07:solutions
-
-# Many new concepts
-
-* Not all covered by lecture
-* Check generated instructions file
-* Tips <http://ruby.railstutorial.org/ruby-on-rails-tutorial-book>
-* Rails reference: <http://railsapi.com/>
-
-# Why starting at Chapter 07?
-
-* RailsTutorial adpated for Devise gem
-* Industry-standard authentication solution
-* Gives us more time to get to the good bits
-* Don't build your auth system by hand
-
-(unless you're a security expert)
-
-# Chapter 7
-
-# Exercises: user_spec
-
-* Check for method present
-* How does ActiveRecord know that there is a name method?
-* No such method is defined anywhere???
-
-# Exercises
-
-* pages_controller_spec
-* user_spec
-* users_controller_spec (show action plus view)
-
-# Named routes
-
-The generator created entries in `config/routes` like so:
-
-    get "pages/contact"
-
-If you switch this to...
-
-    match '/about', :to => 'pages#about'
-
-...you'll get so-called "named routes" with methods:
-
-    about_path  # relative url (without hostname)
-    about_url   # absolute url (with hostname and protocol)
-
-You can verify this by running
-
-    rake routes
-
-# Chapter 08, 09
-
-* Sign up and sign in
-
-# Test Data
-
-## Define the factory
-
-    Factory.define(:user) do |f|
-      f.name "Joe"
-      f.email "joe@example.com"
+    it "finds the user" do
+      get :show, :id => 1
+      assigns[:user].should_not be_nil  # accesses @user in controller
     end
 
-## to produce users
+`users_controller.rb`:
 
-    Factory(:user)  # =>  User record with name=="Joe", ...
+    def show
+      @user = User.find(params[:id])
+    end
 
-&nbsp;
-* Factory data is for testing
-* Permits quick creation of a few records
+# Time helpers
 
-# Chapter 10 Exercises
+    1.day.ago
+    2.weeks.since
 
-Note: A new rake task `rake db:populate` was added to create dummy data for development
+    time_ago_in_words(Time.now)
+    time_ago_in_words(1.day.ago)
 
-* Add an `index` action to `UsersController`, to view all users
-  * Add pagination to the `index` view (Chapter 10.3.3, 10.3.4)
-* Admin Privileges (Chapter 10.4)
-  * Admin flag
-  * Only admins can destroy users
-  * Only admins see destroy link
+# Rendering collections
 
-(Add tests to check that the delete links in Listing 10.38 appear for admins but not for normal users.)
-(Modify the db:populate task such that at least one user has admin privileges)
+`show.html.erb`:
 
-Note: Devise provides a controller method authentication_user!
+    <% @users.each do |u| %>
+      <%= u.name %>
+      ...
+    <% end %>
 
-Also available: generate dummy data
+# Rendering collections via a partial
 
-    rake db:populate
+Move it to a partial by the same name:
+
+`_user.html.erb`:  (singular! and with a leading underscore)
+
+    <% user.name %>
+
+Then call it from the main view:
+
+`show.html.erb` (one way)
+
+    <% @users.each do |user| %>
+     <%= render :partial => 'user', :object => user %>
+    <% end %>
+
+`show.html.erb` (another way)
+
+    <% @users.each do |user| %>
+     <%= render user %>
+    <% end %>
+
+`show.html.erb` (yet another way)
+
+    <%= render @users %>
+
+
+# Finders
+
+    User.find(4)   # raises exception if not found
+
+    User.find_by_id(4)  # return nil
+
+    # also:
+
+    User.find_by_name("Joe")
+
+# Synchronizing Databases
+
+    gem install taps
+    heroku db:pull
+
+<https://devcenter.heroku.com/articles/taps>
+
 
 # Protecting attributes
 
@@ -672,95 +626,20 @@ Associations relate one model to another, e.g. via *foreign keys* or *join table
       has_many :products, :through => :order_line_items
     end
 
-# TFT Gem update
+# Test Data
 
-    bundle update tft_rails
+* Factory data is for testing
+* Permits quick creation of a few records
 
-# Chapter 11.1
+## Define the factory
 
-* Micropost model
-* Association to User model
-
-# Chapter 11.2
-
-* MicropostsContoller
-
-# Chapter 11.3
-
-* Proto feed of user's posts on the home page
-
-# Testing for instance variables in a controller spec
-
-    # spec file:
-
-    it "finds the user" do
-      get :show, :id => 1
-      assigns[:user].should_not be_nil  # accesses @user in controller
+    Factory.define(:user) do |f|
+      f.name "Joe"
+      f.email "joe@example.com"
     end
 
-    # Controller:
+## to produce users
 
-    def show
-      @user = User.find(params[:id])
-    end
-
-# Time helpers
-
-    1.day.ago
-    2.weeks.since
-
-    time_ago_in_words(Time.now)
-    time_ago_in_words(1.day.ago)
-
-# Rendering collections
-
-`show.html.erb`:
-
-    <% @users.each do |u| %>
-      <%= u.name %>
-      ...
-    <% end %>
-
-# Rendering collections via a partial
-
-Move it to a partial by the same name:
-
-`_user.html.erb`:  (singular! and with a leading underscore)
-
-    <% user.name %>
-
-Then call it from the main view:
-
-`show.html.erb` (one way)
-
-    <% @users.each do |user| %>
-     <%= render :partial => 'user', :object => user %>
-    <% end %>
-
-`show.html.erb` (another way)
-
-    <% @users.each do |user| %>
-     <%= render user %>
-    <% end %>
-
-`show.html.erb` (yet another way)
-
-    <%= render @users %>
+    Factory(:user)  # =>  User record with name=="Joe", ...
 
 
-# Finders
-
-    User.find(4)   # raises exception if not found
-
-    User.find_by_id(4)  # return nil
-
-    # also:
-
-    User.find_by_name("Joe")
-
-# Synchronizing Databases
-
-    gem install taps
-    heroku db:pull
-
-<https://devcenter.heroku.com/articles/taps>

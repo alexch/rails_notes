@@ -57,13 +57,15 @@ Ready...?
 * Linux/Mac/Windows
 * git -- revision control
 * RVM -- Ruby version manager
-* gems -- Ruby libraries & management
+* rubygems and Bundler -- Ruby libraries & management
 * rake -- maintenance tasks
 * ruby -- programming language
 * RSpec -- testing framework
 * Rails -- framework
 * ERB -- HTML templates with Ruby
-* MySQL/Sqlite/Postgres -- open source relational database(s)
+* MySQL/Sqlite/Postgres -- open source relational databases
+* Heroku -- cloud deployment platform
+* Github -- cloud version control service
 
 # Help! So much new stuff?!
 

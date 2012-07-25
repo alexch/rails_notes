@@ -1,6 +1,6 @@
 !SLIDE subsection
 
-# Ruby-on-Rails Toolchain
+# Ruby on Rails Toolchain
 
 # Why Git?
 

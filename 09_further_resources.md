@@ -15,21 +15,25 @@
 
 ## Screencasts
 
+watch smart people writing code
+
 * <http://railscasts.com/>
 * <http://asciicasts.com/>
 * <http://destroyallsoftware.com/>
+* <http://ruby.railstutorial.org/#buy>
 
 ## Rails Documentation & Guides
 
 * <http://guides.rubyonrails.org/>
-* <http://railsapi.com/>
+* <http://api.rubyonrails.org/>
+* <http://railsapi.com/> (searchable)
 
 ## Learning Ruby
 
+* <http://codelikethis.com>
 * <http://testfirst.org>
 * <http://rubykoans.com>
 * <http://rubymonk.com>
-* <http://github.com/alexch/ruby_notes>
 
 ## Learning Rails
 
@@ -37,6 +41,7 @@
 * <http://asciicasts.com/>
 * <http://github.com/alexch/rails_notes>
 * <http://curriculum.railsbridge.org>
+* <http://railsapps.github.com/>
 
 ## San Francisco Bay Area Groups
 
