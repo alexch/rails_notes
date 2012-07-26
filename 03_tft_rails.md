@@ -1,3 +1,66 @@
+# Query Exercise
+
+Create a new file in your Rails directory tree: `spec/models/user_queries_spec.rb`. Then paste the following content in:
+
+    require 'spec_helper'
+
+    describe User do
+
+      it 'can retrieve a user by email address'
+
+      it 'retrieves all users sorted by name'
+
+      it 'retrieves all users containing the partial name "Smith"'
+
+      it 'retrieves all users containing the partial name "Smith" sorted by email'
+
+    end
+
+# Validation Exercise
+
+* valid?
+* changed?
+* errors
+
+Create a new file in your Rails directory tree: `spec/models/user_validations_spec.rb`. Then paste the following content in:
+
+    require 'spec_helper'
+
+    describe User do
+
+      it 'is invalid unless name is present'
+
+      it 'the error message says "must be present"'
+
+      it 'when changing an attribute, changed? flag is true'
+
+      it 'it is only valid with both name and email given'
+
+    end
+
+# Onto a Real (Real) App
+
+Rails Tutorial Chapter 3 (page 78ff)
+
+     rails new sample_app -T
+
+-T causes the rails generator to skip the default test unit directories. We'll be using RSpec instead
+
+# Be a good citizen
+
+## ...and put something useful into the README file.
+
+Live Long and Prosper!
+
+# Commit
+
+It's a good time to commit now.
+
+If you're using RubyMine, open your `.gitignore` file and add a line with `.idea/` to it. This excludes RubyMine configuration files from being tracked.
+
+    git add .
+    git commit -m "First commit, RSpec installed"
+
 
 # Test-First Teaching in Rails
 
