@@ -376,36 +376,43 @@ Frozen objects can't be modified
 
 # Rendering collections
 
-`show.html.erb`:
+`index.html.erb`:
 
-    <% @users.each do |u| %>
-      <%= u.name %>
-      ...
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+      </tr>
     <% end %>
 
-# Rendering collections via a partial
+# Rendering collections via a partial (step 1)
 
 Move it to a partial by the same name:
 
 `_user.html.erb`:  (singular! and with a leading underscore)
 
-    <% user.name %>
+    <tr>
+      <td><%= user.name %></td>
+      <td><%= user.email %></td>
+    </tr>
+
+# Rendering collections via a partial (step 2)
 
 Then call it from the main view:
 
-`show.html.erb` (one way)
+`index.html.erb` (one way)
 
     <% @users.each do |user| %>
      <%= render :partial => 'user', :object => user %>
     <% end %>
 
-`show.html.erb` (another way)
+`index.html.erb` (another way)
 
     <% @users.each do |user| %>
      <%= render user %>
     <% end %>
 
-`show.html.erb` (yet another way)
+`index.html.erb` (yet another way)
 
     <%= render @users %>
 
