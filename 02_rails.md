@@ -59,8 +59,7 @@
     cd demo_app
     echo "rvm use 1.9.3@rails3" > .rvmrc
     git init
-    
-    
+
 # Create a Scaffold for User
 
 A scaffold is a vertical slice of application, including a database migration, a model, as well as controller, and views for basic CRUD operations.
@@ -145,9 +144,165 @@ Source: (c) 2011, Michael Hartl, railstutorial.com
 * Tests are boilerplate, and not very robust
 * No real understanding
 
+# Controllers
+
+# Accessing controller instance variables in views
+
+* In a view, controller instance variables are copied into self
+
+`users_controller.rb`:
+
+    def show
+      @user = User.find(params[:id])
+    end
+
+`user.html.erb`:
+
+    <%= @user.name >
+
+
+# Accessing controller instance variables in tests
+
+* In a controller spec, controller instance variables are copied into the `assigns` array
+
+`users_controller.rb`:
+
+    def show
+      @user = User.find(params[:id])
+    end
+
+`users_controller_spec.rb`:
+
+    it "finds the user" do
+      get :show, :id => 1
+      assigns[:user].should_not be_nil  # accesses @user in controller
+    end
+
+# Time helpers
+
+    1.day.ago
+    2.weeks.since
+
+    time_ago_in_words(Time.now)
+    time_ago_in_words(1.day.ago)
+
+
+# Form posts
+
+    @@@ruby
+    class UsersController < ApplicationController
+
+       def create
+         @user = User.create(params[:user])
+         ...
+       end
+    ...
+    end
+
+# The `params` hash
+
+* Form posts
+  * Attributes with `name[...]` will turn into has keys
+* Url components, as defined by routes
+  * `match "/about/:page" => ...
+  * produces a `:page` entry in `params`
+
+
+
+# Views
+
+# Rendering collections
+
+`index.html.erb`:
+
+    <% @users.each do |user| %>
+      <tr>
+        <td><%= user.name %></td>
+        <td><%= user.email %></td>
+      </tr>
+    <% end %>
+
+# Rendering collections via a partial (step 1)
+
+Move it to a partial by the same name:
+
+`_user.html.erb`:  (singular! and with a leading underscore)
+
+    <tr>
+      <td><%= user.name %></td>
+      <td><%= user.email %></td>
+    </tr>
+
+# Rendering collections via a partial (step 2)
+
+Then call it from the main view:
+
+
+`index.html.erb` (one way)
+
+    <% @users.each do |user| %>
+      <%= render :partial => 'user', 
+      :locals => {:user => user} %>
+    <% end %>
+
+`index.html.erb` (another way)
+
+    <% @users.each do |user| %>
+     <%= render :partial => 'user', :object => user %>
+    <% end %>
+
+# 
+
+`index.html.erb` (another way)
+
+    <% @users.each do |user| %>
+     <%= render user %>
+    <% end %>
+
+`index.html.erb` (yet another way)
+
+    <%= render @users %>
+
 # Models
 
-# Rails Console
+# Migrations
+
+* start with a generator
+  * `rails g migration MODEL field:type field:type`
+  * e.g. `rails g migration User name:string age:integer`
+* you must add extra indexes on your own
+  * or `rails g migration add_some_indexes` makes an empty migration which you can fill in 
+* Migrations are stored in the `db/migrate` directory
+
+# Example Migration
+
+This:
+
+    rails generate scaffold User name:string email:string
+
+Generates this:
+
+    db/migrate/20120724185734_create_users.rb
+
+Containing this:
+
+    @@@ruby
+    class CreateUsers < ActiveRecord::Migration
+      def change
+        create_table :users do |t|
+          t.string :name
+          t.string :email
+
+          t.timestamps
+        end
+      end
+    end
+
+Which runs when you do this:
+
+    rake db:migrate
+
+# Brief ActiveRecord Tour
 
     rails c[onsole]
 
@@ -192,15 +347,13 @@ Each column in the database auto-magically turns into a method on the model obje
 * Prevents bad data from entering the database
 * Un-burdens controller or UI from messy validation code
 
-!SLIDE
+# Validation Example
 
     @@@ruby
     class User < ActiveRecord::Base
         validates :name, :email,
                   :presence => true,
                   :length   => {:maximum => 256}
-
-        ...
     end
 
 # Active Record API
@@ -248,31 +401,7 @@ Reference: <http://guides.rubyonrails.org/active_record_querying.html>
     # Alternatively, with hash keys substitution
     User.where(["name = :str AND email = :email", :str => str, :email => 'joe@example.com'])
 
-# Adding RSpec
-Create your app like this:
-
-    rails new sample_app --skip-test-unit
-
-Open `Gemfile` and add:
-
-    group :development do
-      gem 'rspec-rails'
-    end
-    
-    group :test do
-      gem 'rspec'
-      gem 'capybara'
-    end
-
-Then, run:
-
-    bundle install
-    
-And finally:
-
-    rails generate rspec:install
-
-# CRUD Exercise
+# CRUD
 
 ## Class Methods
 
@@ -286,30 +415,7 @@ And finally:
 * attributes, attributes= (operates in-memory only)
 * update_attribute(s) (saves right away)
 * destroy
-
-## Exercise
-
-Create a new file in your Rails directory tree: `spec/models/user_spec.rb`. Then paste the following content in:
-
-    require 'spec_helper'
-    describe User do
-
-      it 'can create a user and retrieve it back by ID' do
-        u = User.create(:name => "Joe", :email => "joe@example.com")
-        User.find(u.id).should == u
-      end
-
-      it 'can instantiate a user with new, then save it, and find it back by ID'
-
-      it 'can update an existing user name with "attributes=" and save, then verify it is been written correctly'
-
-      it 'can update an existing user name with "update_attribute" and save, then verify it is been written correctly'
-
-      it 'can count the number of users'
-
-      it 'can destroy a user, then verify it is gone'
-
-    end
+* various getters and setters, named after DB fields
 
 # Destroyed Objects
 
@@ -329,9 +435,7 @@ Create a new file in your Rails directory tree: `spec/models/user_spec.rb`. Then
 
 Frozen objects can't be modified
 
-# Query Exercise
-
-* ActiveRelations Query language
+# ARel Queries
 
 ## Compose queries with
 
@@ -350,72 +454,6 @@ Frozen objects can't be modified
 * last
 * all
 * count
-
-# Testing for instance variables in a controller spec
-
-`user_spec.rb`:
-
-    it "finds the user" do
-      get :show, :id => 1
-      assigns[:user].should_not be_nil  # accesses @user in controller
-    end
-
-`users_controller.rb`:
-
-    def show
-      @user = User.find(params[:id])
-    end
-
-# Time helpers
-
-    1.day.ago
-    2.weeks.since
-
-    time_ago_in_words(Time.now)
-    time_ago_in_words(1.day.ago)
-
-# Rendering collections
-
-`index.html.erb`:
-
-    <% @users.each do |user| %>
-      <tr>
-        <td><%= user.name %></td>
-        <td><%= user.email %></td>
-      </tr>
-    <% end %>
-
-# Rendering collections via a partial (step 1)
-
-Move it to a partial by the same name:
-
-`_user.html.erb`:  (singular! and with a leading underscore)
-
-    <tr>
-      <td><%= user.name %></td>
-      <td><%= user.email %></td>
-    </tr>
-
-# Rendering collections via a partial (step 2)
-
-Then call it from the main view:
-
-`index.html.erb` (one way)
-
-    <% @users.each do |user| %>
-     <%= render :partial => 'user', :object => user %>
-    <% end %>
-
-`index.html.erb` (another way)
-
-    <% @users.each do |user| %>
-     <%= render user %>
-    <% end %>
-
-`index.html.erb` (yet another way)
-
-    <%= render @users %>
-
 
 # Finders
 
@@ -443,48 +481,7 @@ Then call it from the main view:
 
     User.create!(:name => "Joe", :email => "joe@example.com")
 
-&nbsp;
 * Don't make privileged data mass-assignable!
-
-# Form posts
-
-    @@@ruby
-    class UsersController < ApplicationController
-
-       def create
-         @user = User.create(params[:user])
-         ...
-       end
-    ...
-    end
-
-# The `params` hash
-
-* Form posts
-  * Attributes with `name[...]` will turn into has keys
-* Url components, as defined by routes
-  * `match "/about/:page" => ...
-  * produces a `:page` entry in `params`
-
-# Migrations
-
-* start with a generator
-  * `rails g migration MODEL field:type field:type`
-  * e.g. `rails g migration User User name:string age:integer`
-* you must add extra indexes on your own
-  * or `rails g migration add_some_indexes` makes an empty migration which you can fill in 
-* Migrations are stored in the `db/migrate` directory
-
-# Access Control
-
-## View
-
-* Don't show a privileged link to non-privileged users
-
-## Controller
-
-* Check for privilege on destructive operation
-* Protect against form spoofing
 
 # Microposts
 

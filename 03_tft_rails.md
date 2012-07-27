@@ -1,3 +1,27 @@
+# Adding RSpec
+Create your app like this:
+
+    rails new sample_app --skip-test-unit
+
+Open `Gemfile` and add:
+
+    group :development do
+      gem 'rspec-rails'
+    end
+    
+    group :test do
+      gem 'rspec'
+      gem 'capybara'
+    end
+
+Then, run:
+
+    bundle install
+    
+And finally:
+
+    rails generate rspec:install
+
 # Query Exercise
 
 Create a new file in your Rails directory tree: `spec/models/user_queries_spec.rb`. Then paste the following content in:
@@ -35,6 +59,30 @@ Create a new file in your Rails directory tree: `spec/models/user_validations_sp
       it 'when changing an attribute, changed? flag is true'
 
       it 'it is only valid with both name and email given'
+
+    end
+
+# CRUD Exercise
+
+Create a new file in your Rails directory tree: `spec/models/user_spec.rb`. Then paste the following content in:
+
+    require 'spec_helper'
+    describe User do
+
+      it 'can create a user and retrieve it back by ID' do
+        u = User.create(:name => "Joe", :email => "joe@example.com")
+        User.find(u.id).should == u
+      end
+
+      it 'can instantiate a user with new, then save it, and find it back by ID'
+
+      it 'can update an existing user name with "attributes=" and save, then verify it is been written correctly'
+
+      it 'can update an existing user name with "update_attribute" and save, then verify it is been written correctly'
+
+      it 'can count the number of users'
+
+      it 'can destroy a user, then verify it is gone'
 
     end
 
