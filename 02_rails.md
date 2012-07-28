@@ -479,7 +479,7 @@ Frozen objects can't be modified
 
 * Whitelist of attributes that are mass-assignable, i.e.
 
-    User.create!(:name => "Joe", :email => "joe@example.com")
+        User.create!(:name => "Joe", :email => "joe@example.com")
 
 * Don't make privileged data mass-assignable!
 
