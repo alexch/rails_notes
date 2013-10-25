@@ -263,6 +263,16 @@ Then call it from the main view:
 
     <%= render @users %>
 
+# `yield` in views
+
+`yield` in a layout means "stick the body HTML in right here"
+
+# `yield` and `provide`
+
+`provide` in a view sets a variable; `yield` reads and outputs that value
+
+![yield in layouts](images/yield-in-layout.jpg)
+
 # Models
 
 # Migrations
@@ -367,6 +377,7 @@ Each column in the database auto-magically turns into a method on the model obje
 * attributes, attributes=
 * update_attribute(s)
 * destroy
+* etc...
 
 Reference: <http://railsapi.com/>
 
@@ -388,18 +399,29 @@ Reference: <http://railsapi.com/>
 
 Reference: <http://guides.rubyonrails.org/active_record_querying.html>
 
-# SQL Injection Guards
+# SQL Injection
 
-## NEVER use STRING INTERPOLATION in SQL conditions!!!
+![Bobby Tables](images/exploits_of_a_mom.png)
 
-    str = 'joe'
+<http://xkcd.com/327/>
 
-    User.where("name = #{str}")   # This is UNSAFE!!! DON'T DO IT!
+# NEVER use STRING INTERPOLATION in SQL conditions!!!
 
-    User.where(["name = ?", str])  # This is safe
+`str = 'joe'`
 
-    # Alternatively, with hash keys substitution
-    User.where(["name = :str AND email = :email", :str => str, :email => 'joe@example.com'])
+Don't do this:
+
+    User.where("name = #{str}") # UNSAFE!!!
+
+Do this:
+
+    User.where(["name = ?", str])  # OK
+
+Or this:
+
+    User.where(
+      ["name = :str AND email = :email", 
+      str: str, email: 'joe@example.com'])
 
 # CRUD
 
@@ -477,11 +499,13 @@ Frozen objects can't be modified
 
 ## `attr_accessible`
 
-* Whitelist of attributes that are mass-assignable, i.e.
+* Whitelist of attributes that are *mass-assignable*, i.e.
 
         User.create!(:name => "Joe", :email => "joe@example.com")
 
 * Don't make privileged data mass-assignable!
+
+* Replaced with **strong parameters** in Rails 4
 
 # Microposts
 
@@ -516,6 +540,10 @@ Associations relate one model to another, e.g. via *foreign keys* or *join table
 !SLIDE
 
 ![Micropost User Association](images/micropost_user_association.png)
+
+!SLIDE
+
+![Associations](images/associations.jpg)
 
 # A closer look
 

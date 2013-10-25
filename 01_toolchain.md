@@ -117,9 +117,9 @@ More help:
 # Heroku + Rails gotchas
 
 * install "Heroku Toolbelt" for command-line `heroku` app
+* you must *include* `pg` and *exclude* `sqlite3` in your `Gemfile`'s `:production` group
 * remember to run `heroku run rake db:migrate`
 * decide whether to precompile & check in your `public/assets` directory
   * if you do, then your app is bloated & you might forget next time
   * if you don't, then Heroku does it for you, but your deploys will take longer & might fail
-* you must *include* `pg` and *exclude* `sqlite3` in your `Gemfile`'s `:production` group
 
