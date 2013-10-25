@@ -64,11 +64,26 @@ Can maintain multiple sets of gems for different apps on same machine
 
 # Ready, set, go...
 
+    rvm gemset create rails3
+    
+    rvm gemset use rails3
 
-    gem install rails
+    gem install rails --version 3.2.13
+    
+    rails -v      # should be 3.2.x
 
-    rails new first_app
+    rails new my_blog
+    
+    cd my_blog
+    
+    rails generate scaffold article title body:text published:boolean
 
+    rake db:migrate
+    
+    rails server
+    
+    open http://localhost:3000/articles/
+    
 # Bundler
 
 * Gemfile list all gems required for the app
@@ -98,4 +113,13 @@ More help:
 * Single-command deployment, no setup.
 * Sign-up for free account: heroku.com
 * Free for single dyno (single thread) of web server
+
+# Heroku + Rails gotchas
+
+* install "Heroku Toolbelt" for command-line `heroku` app
+* remember to run `heroku run rake db:migrate`
+* decide whether to precompile & check in your `public/assets` directory
+  * if you do, then your app is bloated & you might forget next time
+  * if you don't, then Heroku does it for you, but your deploys will take longer & might fail
+* you must *include* `pg` and *exclude* `sqlite3` in your `Gemfile`'s `:production` group
 
