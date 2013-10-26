@@ -29,6 +29,7 @@
 
     heroku create
     git push heroku master
+    heroku run rake db:migrate
 
 # Heroku troubleshooting
 
@@ -423,6 +424,35 @@ Or this:
       ["name = :str AND email = :email", 
       str: str, email: 'joe@example.com'])
 
+# Protecting attributes
+
+Anything the user sends in, if it matches a field name & passes validation, goes straight into the database.
+
+    POST /users/1?admin=true
+    
+    params #=> {:id=>1, :admin=>"true"}
+
+    user.update_attributes!(params)
+
+Oops!
+
+# `attr_accessible`
+
+* Worst name in all of Rails. Has nothing at all to do with `attr_accessor`.
+
+* Whitelist of attributes that are *mass-assignable*, i.e. from a hash, e.g.
+
+        User.create!(name: "Joe", email: "joe@example.com")
+        
+      or
+        
+        user.update_attributes!(params)
+
+* Don't make privileged data mass-assignable!
+
+* Replaced with **[strong parameters](http://api.rubyonrails.org/classes/ActionController/StrongParameters.html)** in Rails 4
+
+
 # CRUD
 
 ## Class Methods
@@ -457,6 +487,16 @@ Or this:
 
 Frozen objects can't be modified
 
+# Finders
+
+    User.find(4)   # raises exception if not found
+
+    User.find_by_id(4)  # return nil
+
+    # also:
+
+    User.find_by_name("Joe")
+
 # ARel Queries
 
 ## Compose queries with
@@ -477,35 +517,12 @@ Frozen objects can't be modified
 * all
 * count
 
-# Finders
-
-    User.find(4)   # raises exception if not found
-
-    User.find_by_id(4)  # return nil
-
-    # also:
-
-    User.find_by_name("Joe")
-
 # Synchronizing Databases
 
     gem install taps
     heroku db:pull
 
 <https://devcenter.heroku.com/articles/taps>
-
-
-# Protecting attributes
-
-## `attr_accessible`
-
-* Whitelist of attributes that are *mass-assignable*, i.e.
-
-        User.create!(:name => "Joe", :email => "joe@example.com")
-
-* Don't make privileged data mass-assignable!
-
-* Replaced with **strong parameters** in Rails 4
 
 # Microposts
 
@@ -516,7 +533,7 @@ Frozen objects can't be modified
 # Validations for Micropost
 
     @@@ruby
-    class Micopost < ActiveRecord::Base
+    class Micropost < ActiveRecord::Base
         validates :content,
                   :presence => true,
                   :length   => {:maximum => 140}
@@ -537,46 +554,11 @@ Associations relate one model to another, e.g. via *foreign keys* or *join table
       belongs_to :user
     end
 
-!SLIDE
-
 ![Micropost User Association](images/micropost_user_association.png)
 
 !SLIDE
 
 ![Associations](images/associations.jpg)
-
-# A closer look
-
-    rails console
-
-    > u = User.find(1)
-    > u.microposts.create(:content => "Hello World")
-
-# Deploy
-
-    # create .gitignore file
-    git init
-    git add .
-    git commit -m 'initial commit'
-
-    heroku create
-    git push heroku master
-    heroku rake db:migrate
-
-# Scopes
-
-## Named queries
-
-    @@@ruby
-    class ShippingAddress < ActiveRecord::Base
-
-      has_many :orders
-
-      scope :us, where(:country => "US")
-      scope :in_state, lambda {|st| where(:state => st) }
-
-      scope :on_file, lambda { includes(:orders).order('orders.created_at DESC').where('orders.created_at > ?', 12.months.ago) }
-    end
 
 # Many-to-many relationships
 
@@ -595,6 +577,30 @@ Associations relate one model to another, e.g. via *foreign keys* or *join table
       has_many :products, :through => :order_line_items
     end
 
+![has many through](images/has_many_through.jpg)
+
+# Scopes
+
+A *scope* is essentially a *named query* built with *Arel predicates*.
+
+    @@@ruby
+    class ShippingAddress < ActiveRecord::Base
+
+      has_many :orders
+
+      scope :us, where(:country => "US")
+      
+      scope :in_state, lambda {|st| where(:state => st)}
+
+      scope :on_file, lambda do 
+        includes(:orders).
+          order('orders.created_at DESC').
+          where('orders.created_at > ?', 12.months.ago)
+      end
+    end
+    
+    ShippingAddress.in_state('VT').on_file.all
+
 # Test Data
 
 * Factory data is for testing
@@ -602,13 +608,16 @@ Associations relate one model to another, e.g. via *foreign keys* or *join table
 
 ## Define the factory
 
-    Factory.define(:user) do |f|
+    FactoryGirl.define(:user) do |f|
       f.name "Joe"
       f.email "joe@example.com"
     end
 
 ## to produce users
 
-    Factory(:user)  # =>  User record with name=="Joe", ...
+    joe = Factory(:user)
+      #=> User record with name:"Joe"
 
+    bob = Factory(:user, name: "Bob")
+      #=> User record with name:"Bob" and email:"joe@example.com"
 
